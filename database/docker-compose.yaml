@@ -8,6 +8,6 @@ services:
       - FIREBIRD_DATABASE=Prik2Go_res_v3.fdb
       - FIREBIRD_DATABASE_DEFAULT_CHARSET=UTF8
     ports:
-      - "3050:3050"
+      - "3052:3050"
     volumes:
       - ./data:/var/lib/firebird/data
