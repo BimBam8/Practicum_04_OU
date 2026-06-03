@@ -3,15 +3,24 @@ package domein;
 import domein.Klant;
 
 public class Vestiging {
-    private String plaatsNaam;
-    private String postcode;
-    private Klant[] klanten;
+    private final String plaatsNaam;
+    private final String postcode;
+    private final Klant[] klanten;
 
-    public Vestiging() {
-
+    public Vestiging(String plaatsNaam, String postcode, Klant[] klanten) {
+        this.plaatsNaam = plaatsNaam;
+        this.postcode = postcode;
+        this.klanten = klanten;
     }
 
     public String[] getKlantenInfo() {
-        return new String[1];
+        String[] retString = new String[klanten.length];
+        for (int i = 0; i < klanten.length; i++) {
+            retString[i] = klanten[i].getNummer();
+        }
+        return retString;
+    }
+    public String getPlaatsNaam() {
+        return plaatsNaam;
     }
 }

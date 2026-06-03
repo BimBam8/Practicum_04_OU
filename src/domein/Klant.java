@@ -1,8 +1,8 @@
 package domein;
 
 public class Klant {
-    private String nr;
-    private String postcode;
+    private final String nr;
+    private final String postcode;
 
     public Klant(String nr, String postcode) {
         this.nr = nr;

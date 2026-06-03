@@ -1,23 +1,23 @@
 package domein;
 
-import domein.Vestiging;
-
-import javax.swing.SizeRequirements;
-
 import data.Mapper;
 
 public class PrikToGo {
-    private Vestiging[] vestigingen;
+    private final Vestiging[] vestigingen;
 
     public PrikToGo() {
         vestigingen = Mapper.getVestigingen();
     }
 
     public String[] selecteerVestiging(int id) {
-        return new String[1];
+        return vestigingen[id].getKlantenInfo();
     }
 
     public String[] getOverzichtVestigingen() {
-        return new String[1];
+        String[] reStrings = new String[vestigingen.length];
+        for (int i = 0; i < reStrings.length; i++) {
+            reStrings[i] = vestigingen[i].getPlaatsNaam();
+        }
+        return reStrings;
     }
 }
