@@ -16,7 +16,7 @@ public class Vestiging {
     public String[] getKlantenInfo() {
         String[] retString = new String[klanten.length];
         for (int i = 0; i < klanten.length; i++) {
-            retString[i] = klanten[i].getNummer();
+            retString[i] = Integer.toString(klanten[i].getNummer());
         }
         return retString;
     }

@@ -1,15 +1,15 @@
 package domein;
 
 public class Klant {
-    private final String nr;
+    private final int nr;
     private final String postcode;
 
-    public Klant(String nr, String postcode) {
+    public Klant(int nr, String postcode) {
         this.nr = nr;
         this.postcode = postcode;
     }
 
-    public String getNummer() {
+    public int getNummer() {
         return nr;
     }
 }

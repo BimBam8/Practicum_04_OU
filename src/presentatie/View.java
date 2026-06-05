@@ -21,7 +21,7 @@ public class View extends JFrame{
         this.ptg = ptg;
         initialiseerVenster();
         initialiseerComponenten();
-        laadVestigingen()
+        laadVestigingen();
         setVisible(true);
     }
 
