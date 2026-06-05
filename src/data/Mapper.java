@@ -16,55 +16,55 @@ public class Mapper {
     private static final String DATABASE_PASSWORD = "masterkey";
     private static final String DRIVERNAME = "org.firebirdsql.jdbc.FBDriver";
 
-    // public static Vestiging[] getVestigingen() {
-    //     try {
-
-    //         String sqlString = "SELECT v.plaats, v.postcode, COUNT(*) OVER() AS len_vestiging\n" +
-    //                 "FROM vestiging AS v";
-    //         String lenVestiginen = "len_vestiging";
-    //         String naamKey = "plaats";
-    //         String pcKey = "postcode";
-    //         Class.forName(DRIVERNAME);
-
-    //         Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
-    //         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
-    //         ResultSet resultSet = preparedStatement.executeQuery();
-    //         if (!resultSet.next()) {
-    //             return new Vestiging[0];
-    //         }
-    //         int lenVes = resultSet.getInt(lenVestiginen);
-    //         String vesNaam = resultSet.getString(naamKey);
-    //         String vesPostCode = resultSet.getString(pcKey);
-    //         Vestiging[] vestigingen = new Vestiging[lenVes];
-
-    //         vestigingen[0] = new Vestiging(vesNaam, vesPostCode, getKlanten(vesNaam, connection));
-    //         // System.out.println(vesNaam + vesPostCode);
-    //         printarr(vestigingen);
-    //         for (int i = 1; resultSet.next(); i++) {
-    //             System.out.println("hallojkahlefikjh");
-    //             vesNaam = resultSet.getString(naamKey);
-    //             vesPostCode = resultSet.getString(pcKey);
-                
-    //             vestigingen[i] = new Vestiging(vesNaam, vesPostCode, getKlanten(vesNaam, connection));
-    //         }
-    //         connection.close();
-    //         return vestigingen;
-    //     } catch (Exception e) {
-    //         // System.err.println(e.getMessage());
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
-
-    // Voor testen van view, hardcoded vestigingen en klanten
     public static Vestiging[] getVestigingen() {
-        Klant[] klantenAdam = new Klant[]{new Klant(1001, "1234AB"), new Klant(1002, "5678CD")};
-        Klant[] klantenRdam = new Klant[]{new Klant(2001, "3000AA"), new Klant(2002, "3001BB")};
-        return new Vestiging[]{
-            new Vestiging("Amsterdam", "1000AA", klantenAdam),
-            new Vestiging("Rotterdam", "3000AA", klantenRdam)
-    };
-}
+        try {
+
+            String sqlString = "SELECT v.plaats, v.postcode, COUNT(*) OVER() AS len_vestiging\n" +
+                    "FROM vestiging AS v";
+            String lenVestiginen = "len_vestiging";
+            String naamKey = "plaats";
+            String pcKey = "postcode";
+            Class.forName(DRIVERNAME);
+
+            Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                return new Vestiging[0];
+            }
+            int lenVes = resultSet.getInt(lenVestiginen);
+            String vesNaam = resultSet.getString(naamKey);
+            String vesPostCode = resultSet.getString(pcKey);
+            Vestiging[] vestigingen = new Vestiging[lenVes];
+
+            vestigingen[0] = new Vestiging(vesNaam, vesPostCode, getKlanten(vesNaam, connection));
+            // System.out.println(vesNaam + vesPostCode);
+            printarr(vestigingen);
+            for (int i = 1; resultSet.next(); i++) {
+                System.out.println("hallojkahlefikjh");
+                vesNaam = resultSet.getString(naamKey);
+                vesPostCode = resultSet.getString(pcKey);
+                
+                vestigingen[i] = new Vestiging(vesNaam, vesPostCode, getKlanten(vesNaam, connection));
+            }
+            connection.close();
+            return vestigingen;
+        } catch (Exception e) {
+            // System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Voor testen van view, hardcoded vestigingen en klanten / Niels
+    // public static Vestiging[] getVestigingen() {
+    //     Klant[] klantenAdam = new Klant[]{new Klant(1001, "1234AB"), new Klant(1002, "5678CD")};
+    //     Klant[] klantenRdam = new Klant[]{new Klant(2001, "3000AA"), new Klant(2002, "3001BB")};
+    //     return new Vestiging[]{
+    //         new Vestiging("Amsterdam", "1000AA", klantenAdam),
+    //         new Vestiging("Rotterdam", "3000AA", klantenRdam)
+    //     };
+    // }
 
 
     private static Klant[] getKlanten(String vestiging, Connection connection) {
