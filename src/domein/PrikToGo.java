@@ -3,9 +3,11 @@ package domein;
 import data.Mapper;
 
 public class PrikToGo {
+
     private final Vestiging[] vestigingen;
 
     public PrikToGo() {
+        
         vestigingen = Mapper.getVestigingen();
     }
 
