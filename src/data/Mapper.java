@@ -50,11 +50,22 @@ public class Mapper {
             connection.close();
             return vestigingen;
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            // System.err.println(e.getMessage());
+            e.printStackTrace();
         }
-
         return null;
     }
+
+    // Voor testen van view, hardcoded vestigingen en klanten / Niels
+    // public static Vestiging[] getVestigingen() {
+    //     Klant[] klantenAdam = new Klant[]{new Klant(1001, "1234AB"), new Klant(1002, "5678CD")};
+    //     Klant[] klantenRdam = new Klant[]{new Klant(2001, "3000AA"), new Klant(2002, "3001BB")};
+    //     return new Vestiging[]{
+    //         new Vestiging("Amsterdam", "1000AA", klantenAdam),
+    //         new Vestiging("Rotterdam", "3000AA", klantenRdam)
+    //     };
+    // }
+
 
     private static Klant[] getKlanten(String vestiging, Connection connection) {
         // Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);

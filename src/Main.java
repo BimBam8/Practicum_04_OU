@@ -1,6 +1,6 @@
 import domein.PrikToGo;
 import domein.Vestiging;
-// import presentatie.View;
+import presentatie.View;
 
 
 
@@ -9,7 +9,7 @@ public class Main {
 		try {
 			PrikToGo prikToGo = new PrikToGo();
 
-			// View view = new View(prikToGo);
+			View view = new View(prikToGo);
 			
 			String[] ves = prikToGo.getOverzichtVestigingen();
 			for (String string : ves) {
