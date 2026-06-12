@@ -8,6 +8,12 @@ import java.awt.event.WindowEvent;
 
 import domein.PrikToGo;
 
+/**
+ * View GUI voor de Applicatie
+ * 
+ * @author Niels
+ * @author Sem
+ */
 public class View extends JFrame{
     private final PrikToGo ptg;
     private JComboBox<String> vestigingenComboBox;
