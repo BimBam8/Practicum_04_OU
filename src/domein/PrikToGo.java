@@ -5,6 +5,9 @@ import data.Mapper;
 /**
  * Kapstokklasse voor de Prik2Go applicatie.
  * Beheert alle vestigingen en hun klanten.
+ * 
+ * @author Niels
+ * @author Sem
  */
 public class PrikToGo {
 

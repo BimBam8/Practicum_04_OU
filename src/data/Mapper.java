@@ -4,11 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.DriverManager;
 
 import domein.Klant;
 import domein.Vestiging;
-
+/**
+ * Mapper klasse voor connectie met de database
+ * 
+ * @author Sem
+ * @author Niels
+*/
 public class Mapper {
 
     private static final String DATABASE_URL = "jdbc:firebirdsql://localhost:3052//var/lib/firebird/data/Prik2Go_res_v3.fdb";
@@ -16,97 +23,73 @@ public class Mapper {
     private static final String DATABASE_PASSWORD = "masterkey";
     private static final String DRIVERNAME = "org.firebirdsql.jdbc.FBDriver";
 
+    /**
+     * Maakt een tijdelijke connectie aan met de database. Om de informatie van vestigingen op te vragen.
+     * 
+     * In geval van Exception returnt null
+     * 
+     * @return De verkregen vestigingen array van de database. Anders null
+     */
     public static Vestiging[] getVestigingen() {
+        Connection connection = null;
         try {
-
-            String sqlString = "SELECT v.plaats, v.postcode, COUNT(*) OVER() AS len_vestiging\n" +
-                    "FROM vestiging AS v";
-            String lenVestiginen = "len_vestiging";
-            String naamKey = "plaats";
-            String pcKey = "postcode";
             Class.forName(DRIVERNAME);
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
+            List<String[]> sqlRows = new ArrayList<String[]>();
+            String sqlString = "SELECT plaats, postcode FROM vestiging";
 
-            Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                return new Vestiging[0];
-            }
-            int lenVes = resultSet.getInt(lenVestiginen);
-            String vesNaam = resultSet.getString(naamKey);
-            String vesPostCode = resultSet.getString(pcKey);
-            Vestiging[] vestigingen = new Vestiging[lenVes];
+            try (PreparedStatement ps = connection.prepareStatement(sqlString);
+                    ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    sqlRows.add(new String[] { rs.getString("plaats"), rs.getString("postcode") });
+                }
 
-            vestigingen[0] = new Vestiging(vesNaam, vesPostCode, getKlanten(vesNaam, connection));
-            // System.out.println(vesNaam + vesPostCode);
-            printarr(vestigingen);
-            for (int i = 1; resultSet.next(); i++) {
-                System.out.println("hallojkahlefikjh");
-                vesNaam = resultSet.getString(naamKey);
-                vesPostCode = resultSet.getString(pcKey);
-                
-                vestigingen[i] = new Vestiging(vesNaam, vesPostCode, getKlanten(vesNaam, connection));
+                Vestiging[] vestigingen = new Vestiging[sqlRows.size()];
+                for (int i = 0; i < sqlRows.size(); i++) {
+                    String plaats = sqlRows.get(i)[0];
+                    String postcode = sqlRows.get(i)[1];
+                    vestigingen[i] = new Vestiging(plaats, postcode, getKlanten(plaats, connection));
+                }
+                return vestigingen;
             }
-            connection.close();
-            return vestigingen;
-        } catch (Exception e) {
-            // System.err.println(e.getMessage());
-            e.printStackTrace();
+
+        } catch (Exception e) { 
+
+            e.fillInStackTrace();
+            return null;
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                }
+            }
         }
-        return null;
     }
 
-    // Voor testen van view, hardcoded vestigingen en klanten / Niels
-    // public static Vestiging[] getVestigingen() {
-    //     Klant[] klantenAdam = new Klant[]{new Klant(1001, "1234AB"), new Klant(1002, "5678CD")};
-    //     Klant[] klantenRdam = new Klant[]{new Klant(2001, "3000AA"), new Klant(2002, "3001BB")};
-    //     return new Vestiging[]{
-    //         new Vestiging("Amsterdam", "1000AA", klantenAdam),
-    //         new Vestiging("Rotterdam", "3000AA", klantenRdam)
-    //     };
-    // }
-
-
-    private static Klant[] getKlanten(String vestiging, Connection connection) {
-        // Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
-        String sqlString = "SELECT k.nr, k.postcode, COUNT(*) OVER() AS len_klant\n" +
-                "FROM klant AS k\n" +
-                "LEFT JOIN bezoek AS b ON k.nr = b.klant\n" +
-                "WHERE b.vestiging = ?;";
-        String lenKey = "len_klant";
-        String nrKey = "nr";
-        String pcKey = "postcode";
-        try {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
-            preparedStatement.setString(1, vestiging);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            Klant[] klanten = new Klant[0];
-            if (!resultSet.next()) {
-                return klanten;
+    /**
+     * Haalt de klanten op van een speciefieke vestiging bij een specifieke database connectie.
+     * 
+     * @param vestiging
+     * @param connection
+     * @return De verkregen klanten array. Anders een lege klanten array.
+     * @throws SQLException
+     */
+    private static Klant[] getKlanten(String vestiging, Connection connection) throws SQLException {
+        String sql = "SELECT DISTINCT k.nr, k.postcode " +
+                "FROM klant k " +
+                "JOIN bezoek b ON k.nr = b.klant " +
+                "WHERE b.vestiging = ?";
+        List<Klant> klanten = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, vestiging);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    klanten.add(new Klant(rs.getInt("nr"), rs.getString("postcode")));
+                }
             }
-            int lenKlanten = resultSet.getInt(lenKey);
-            klanten = new Klant[lenKlanten];
-
-            int klantNr = resultSet.getInt(nrKey);
-            String klantPostcode = resultSet.getString(pcKey);
-            klanten[0] = new Klant(klantNr, klantPostcode);
-
-            for (int i = 1; resultSet.next(); i++) {
-                klantNr = resultSet.getInt(nrKey);
-                klantPostcode = resultSet.getString(pcKey);
-                klanten[i] = new Klant(klantNr, klantPostcode);
-            }
-            // printarr(klanten);
-            return klanten;
-        } catch (Exception e) {
-            System.err.println("klanten error | " + e.getMessage());
         }
-        return new Klant[0];
-    }
-    static private void printarr(Object[] arr){
-        for (Object object : arr) {
-            System.out.println(object);
-        }
+        return klanten.toArray(new Klant[0]);
     }
 }

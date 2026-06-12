@@ -4,6 +4,9 @@ import domein.Klant;
 
 /**
  * Stelt een vestiging voor met een plaatsnaam, postcode en bijbehorende klanten.
+ * 
+ * @author Niels
+ * @author Sem
  */
 public class Vestiging {
     private final String plaatsNaam;
