@@ -10,12 +10,13 @@ import java.sql.DriverManager;
 
 import domein.Klant;
 import domein.Vestiging;
+
 /**
  * Mapper klasse voor connectie met de database
  * 
  * @author Sem
  * @author Niels
-*/
+ */
 public class Mapper {
 
     private static final String DATABASE_URL = "jdbc:firebirdsql://localhost:3052//var/lib/firebird/data/Prik2Go_res_v3.fdb";
@@ -24,7 +25,8 @@ public class Mapper {
     private static final String DRIVERNAME = "org.firebirdsql.jdbc.FBDriver";
 
     /**
-     * Maakt een tijdelijke connectie aan met de database. Om de informatie van vestigingen op te vragen.
+     * Maakt een tijdelijke connectie aan met de database. Om de informatie van
+     * vestigingen op te vragen.
      * 
      * In geval van Exception returnt null
      * 
@@ -34,26 +36,28 @@ public class Mapper {
         Connection connection = null;
         try {
             Class.forName(DRIVERNAME);
+
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
+
             List<String[]> sqlRows = new ArrayList<String[]>();
             String sqlString = "SELECT plaats, postcode FROM vestiging";
 
-            try (PreparedStatement ps = connection.prepareStatement(sqlString);
-                    ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    sqlRows.add(new String[] { rs.getString("plaats"), rs.getString("postcode") });
-                }
+            PreparedStatement ps = connection.prepareStatement(sqlString);
+            ResultSet rs = ps.executeQuery();
 
-                Vestiging[] vestigingen = new Vestiging[sqlRows.size()];
-                for (int i = 0; i < sqlRows.size(); i++) {
-                    String plaats = sqlRows.get(i)[0];
-                    String postcode = sqlRows.get(i)[1];
-                    vestigingen[i] = new Vestiging(plaats, postcode, getKlanten(plaats, connection));
-                }
-                return vestigingen;
+            while (rs.next()) {
+                sqlRows.add(new String[] { rs.getString("plaats"), rs.getString("postcode") });
             }
 
-        } catch (Exception e) { 
+            Vestiging[] vestigingen = new Vestiging[sqlRows.size()];
+            for (int i = 0; i < sqlRows.size(); i++) {
+                String plaats = sqlRows.get(i)[0];
+                String postcode = sqlRows.get(i)[1];
+                vestigingen[i] = new Vestiging(plaats, postcode, getKlanten(plaats, connection));
+            }
+            return vestigingen;
+
+        } catch (Exception e) {
 
             e.fillInStackTrace();
             return null;
@@ -69,7 +73,8 @@ public class Mapper {
     }
 
     /**
-     * Haalt de klanten op van een speciefieke vestiging bij een specifieke database connectie.
+     * Haalt de klanten op van een speciefieke vestiging bij een specifieke database
+     * connectie.
      * 
      * @param vestiging
      * @param connection

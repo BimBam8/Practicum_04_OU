@@ -34,6 +34,9 @@ public class PrikToGo {
      * @return array van plaatsnamen
      */
     public String[] getOverzichtVestigingen() {
+        if (vestigingen == null){
+            return null;
+        }
         String[] reStrings = new String[vestigingen.length];
         for (int i = 0; i < reStrings.length; i++) {
             reStrings[i] = vestigingen[i].getPlaatsNaam();

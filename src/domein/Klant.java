@@ -2,6 +2,7 @@ package domein;
 
 /**
  * Stelt een klant voor met een uniek nummer en postcode.
+ * 
  * @author Niels
  * @author Sem
  */

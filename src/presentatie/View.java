@@ -102,7 +102,7 @@ public class View extends JFrame{
         String[] vestigingen = ptg.getOverzichtVestigingen();
         if (vestigingen == null) {
             JOptionPane.showMessageDialog(this, "Fout bij laden vestigingen.", "Fout", JOptionPane.ERROR_MESSAGE);
-            return;
+            dispose();
         }
         isLaden = true;// Voorkomt toonKlanten door ActionListener Combobox tijdens laden van vestigingen
         vestigingenComboBox.setModel(new DefaultComboBoxModel<>(vestigingen));
