@@ -15,7 +15,7 @@ import domein.PrikToGo;
  * @author Sem
  */
 public class View extends JFrame{
-    private final PrikToGo ptg;
+    private final PrikToGo prikToGo;
     private JComboBox<String> vestigingenComboBox;
     private JList<String> klantenLijst;
     private DefaultListModel<String> klantenLijstModel;
@@ -24,8 +24,8 @@ public class View extends JFrame{
     private boolean isLaden;
 
 
-    public View(PrikToGo ptg) {
-        this.ptg = ptg;
+    public View(PrikToGo prikToGo) {
+        this.prikToGo = prikToGo;
         initialiseerVenster();
         initialiseerComponenten();
         laadVestigingen();
@@ -99,7 +99,7 @@ public class View extends JFrame{
     // Laadt de vestigingen in het dropdownmenu bij het starten van de applicatie
     // en toont een foutmelding als er iets misgaat
     private void laadVestigingen() {
-        String[] vestigingen = ptg.getOverzichtVestigingen();
+        String[] vestigingen = prikToGo.getOverzichtVestigingen();
         if (vestigingen == null) {
             JOptionPane.showMessageDialog(this, "Fout bij laden vestigingen.", "Fout", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -119,7 +119,7 @@ public class View extends JFrame{
         }   
         int geselecteerdeIndex = vestigingenComboBox.getSelectedIndex();
         if (geselecteerdeIndex >= 0) {
-            String[] klanten = ptg.selecteerVestiging(geselecteerdeIndex);
+            String[] klanten = prikToGo.selecteerVestiging(geselecteerdeIndex);
             if (klanten == null) {
                 JOptionPane.showMessageDialog(this, "Fout bij laden klanten.", "Fout", JOptionPane.ERROR_MESSAGE);
                 return;
