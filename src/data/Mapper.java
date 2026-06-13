@@ -19,7 +19,11 @@ import domein.Vestiging;
  */
 public class Mapper {
 
-    private static final String DATABASE_URL = "jdbc:firebirdsql://localhost:3052//var/lib/firebird/data/Prik2Go_res_v3.fdb";
+    // Bovenste String is voor gebruik Sem en Niels
+    // private static final String DATABASE_URL = "jdbc:firebirdsql://localhost:3052//var/lib/firebird/data/Prik2Go_res_v3.fdb";
+
+    // Constanten zoals gevraagd in antwoordsjabloon
+    private static final String DATABASE_URL = "jdbc:firebirdsql://localhost/D:/POI_DB/Prik2Go_res.fdb";
     private static final String DATABASE_USER = "sysdba";
     private static final String DATABASE_PASSWORD = "masterkey";
     private static final String DRIVERNAME = "org.firebirdsql.jdbc.FBDriver";
