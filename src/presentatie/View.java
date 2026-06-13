@@ -101,7 +101,7 @@ public class View extends JFrame{
     private void laadVestigingen() {
         String[] vestigingen = prikToGo.getOverzichtVestigingen();
         if (vestigingen == null) {
-            JOptionPane.showMessageDialog(this, "Fout bij laden vestigingen.", "Fout", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Fout bij laden vestigingen. Probeer het later nog eens.", "Fout", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
         isLaden = true;// Voorkomt toonKlanten door ActionListener Combobox tijdens laden van vestigingen
@@ -121,7 +121,7 @@ public class View extends JFrame{
         if (geselecteerdeIndex >= 0) {
             String[] klanten = prikToGo.selecteerVestiging(geselecteerdeIndex);
             if (klanten == null) {
-                JOptionPane.showMessageDialog(this, "Fout bij laden klanten.", "Fout", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Fout bij laden klanten. Probeer het later nog eens.", "Fout", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             klantenLijstModel.clear();
